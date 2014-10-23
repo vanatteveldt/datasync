@@ -2,7 +2,9 @@
 #' @export
 get.data.folder <- function() {
   dataroot = Sys.getenv("R_DATA_FOLDER")
-  ifelse(dataroot == "", "~/data", dataroot)
+  if (dataroot == "") dataroot = "~/data"
+  dir.create(dataroot, showWarnings=F, recursive=F)
+  dataroot
 }
 
 #' Set the data folder to use
@@ -17,10 +19,11 @@ set.data.folder <- function(data_folder) {
 #' 
 #' @param file: the file name, including path (relative to data_folder)
 #' @param data_folder: the data folder, defauts to get.data.folder()
+#' @param envir: the environment to load the data into, defaults to the global environment
 #' @export
-load.data <- function(file, data_folder=NULL) {
+load.data <- function(file, data_folder=NULL, envir=.GlobalEnv) {
   if (is.null(data_folder)) data_folder = get.data.folder()
-  load(file.path(data_folder, fn))
+  load(file.path(data_folder, file), envir=envir)
 }
 
 #' Save variables into a file in the data folder
@@ -28,8 +31,9 @@ load.data <- function(file, data_folder=NULL) {
 #' @param ...: the variables to save
 #' @param file: the file name to save (relative to data_folder)
 #' @param data_folder: the data folder, defaults to get.data.folder()
-save.data(..., file, data_folder=NULL) {
-  
+save.data <- function(..., file, data_folder=NULL) {
+  if (is.null(data_folder)) data_folder = get.data.folder()  
+  save(..., file=file.path(data_folder, file))
 }
 
 #' Conduct an rsync with a remote host
@@ -44,8 +48,8 @@ save.data(..., file, data_folder=NULL) {
 #' @export
 rsync <- function(remote_host, remote_folder=NULL, local_folder=NULL, dry_run=F) {
   trail <- function(p) paste(p, ifelse(grepl("/$", p), "", "/"), sep="")
-  local = trail(ifelse(is.null(local_root), get.data.folder(), local_root))
-  remote = trail(paste(remote_host, ifelse(is.null(remote_root), get.data.folder(), remote_root), sep=":"))
+  local = trail(ifelse(is.null(local_folder), get.data.folder(), local_folder))
+  remote = trail(paste(remote_host, ifelse(is.null(remote_folder), get.data.folder(), remote_folder), sep=":"))
   cmd = "rsync -azuvve ssh"
   if (dry_run) cmd = paste(cmd, "--dry-run")
   system(paste(cmd, local, remote))
