@@ -23,14 +23,20 @@ Note: If `devtools` is not available, you can simple source the [data.r](R/data.
 Loading and saving data
 ----
 
-To demonstrate loading and saving data, let's setup a new folder in the temporary folder as data.folder
+To demonstrate loading and saving data, let's setup a new folder in the temporary folder as data.folder (Normally, you would not call this function but either use the default location (~/data) or set the `R_DATA_ROOT` variable):
 
 ```{r}
 set.data.folder(tempfile())
+```
+
+
+Now, we can save and load files to that folder, which will be created recursively:
+
+```{r}
 foo = "bar"
-save.data(foo, file = "test.rdata")
+save.data(foo, file = "myproject/test.rdata")
 rm("foo")
-load.data("test.rdata")
+load.data("myproject/test.rdata")
 foo
 ```
 
@@ -48,9 +54,9 @@ To demonstrate this function, I will use `localhost` as the "remote" host and sy
 ```{r}
 remote = tempfile()
 dir.create(remote)
-save(foo, file=file.path(remote, "test2.rdata"))
-list.files(remote)
-list.files(get.data.folder())
+save(foo, file=file.path(remote, "myproject/test2.rdata"))
+list.files(file.path(remote, "myproject"))
+list.files(file.path(get.data.folder(), "myproject"))
 ```
 
 As you can see, the 'local' folder contains `test.rdata`, while the remote folder contains `test2.rdata`. 
@@ -63,8 +69,8 @@ rsync(remote_host = "localhost", remote_folder = remote)
 Let's inspect the folders:
 
 ```{r}
-list.files(remote)
-list.files(get.data.folder())
+list.files(file.path(remote, "myproject"))
+list.files(file.path(get.data.folder(), "myproject"))
 ```
 
 If we call rsync again, only new or changed files will synchronized. 

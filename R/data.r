@@ -33,8 +33,10 @@ load.data <- function(file, data_folder=NULL, envir=.GlobalEnv) {
 #' @param data_folder: the data folder, defaults to get.data.folder()
 #' @export
 save.data <- function(..., file, data_folder=NULL) {
-  if (is.null(data_folder)) data_folder = get.data.folder()  
-  save(..., file=file.path(data_folder, file))
+  if (is.null(data_folder)) data_folder = get.data.folder() 
+  file = file.path(data_folder, file)
+  dir.create(dirname(file), showWarnings=F, recursive=T)
+  save(..., file=file)
 }
 
 #' Conduct an rsync with a remote host
