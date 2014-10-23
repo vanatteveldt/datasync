@@ -31,6 +31,7 @@ load.data <- function(file, data_folder=NULL, envir=.GlobalEnv) {
 #' @param ...: the variables to save
 #' @param file: the file name to save (relative to data_folder)
 #' @param data_folder: the data folder, defaults to get.data.folder()
+#' @export
 save.data <- function(..., file, data_folder=NULL) {
   if (is.null(data_folder)) data_folder = get.data.folder()  
   save(..., file=file.path(data_folder, file))
