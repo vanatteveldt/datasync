@@ -53,7 +53,7 @@ To demonstrate this function, I will use `localhost` as the "remote" host and sy
 
 ```{r}
 remote = tempfile()
-dir.create(remote)
+dir.create(file.path(remote, "myproject"), recursive=T)
 save(foo, file=file.path(remote, "myproject/test2.rdata"))
 list.files(file.path(remote, "myproject"))
 list.files(file.path(get.data.folder(), "myproject"))

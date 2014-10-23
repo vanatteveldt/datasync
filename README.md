@@ -38,39 +38,13 @@ Now, we can save and load files to that folder, which will be created recursivel
 ```r
 foo = "bar"
 save.data(foo, file = "myproject/test.rdata")
-```
-
-```
-## Warning in gzfile(file, "wb"): cannot open compressed file
-## '/tmp/RtmpEvJG6e/file6fa31ec556a3/myproject/test.rdata', probable reason
-## 'No such file or directory'
-```
-
-```
-## Error in gzfile(file, "wb"): cannot open the connection
-```
-
-```r
 rm("foo")
 load.data("myproject/test.rdata")
-```
-
-```
-## Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file
-## '/tmp/RtmpEvJG6e/file6fa31ec556a3/myproject/test.rdata', probable reason
-## 'No such file or directory'
-```
-
-```
-## Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection
-```
-
-```r
 foo
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'foo' not found
+## [1] "bar"
 ```
 
 Obviously, there is not a lot of magic going on here. 
@@ -87,20 +61,13 @@ To demonstrate this function, I will use `localhost` as the "remote" host and sy
 
 ```r
 remote = tempfile()
-dir.create(remote)
+dir.create(file.path(remote, "myproject"), recursive=T)
 save(foo, file=file.path(remote, "myproject/test2.rdata"))
-```
-
-```
-## Error in save(foo, file = file.path(remote, "myproject/test2.rdata")): object 'foo' not found
-```
-
-```r
 list.files(file.path(remote, "myproject"))
 ```
 
 ```
-## character(0)
+## [1] "test2.rdata"
 ```
 
 ```r
@@ -108,7 +75,7 @@ list.files(file.path(get.data.folder(), "myproject"))
 ```
 
 ```
-## character(0)
+## [1] "test.rdata"
 ```
 
 As you can see, the 'local' folder contains `test.rdata`, while the remote folder contains `test2.rdata`. 
@@ -127,7 +94,7 @@ list.files(file.path(remote, "myproject"))
 ```
 
 ```
-## character(0)
+## [1] "test2.rdata" "test.rdata"
 ```
 
 ```r
@@ -135,7 +102,7 @@ list.files(file.path(get.data.folder(), "myproject"))
 ```
 
 ```
-## character(0)
+## [1] "test2.rdata" "test.rdata"
 ```
 
 If we call rsync again, only new or changed files will synchronized. 
