@@ -3,7 +3,7 @@
 get.data.folder <- function() {
   dataroot = Sys.getenv("R_DATA_FOLDER")
   if (dataroot == "") dataroot = "~/data"
-  dir.create(dataroot, showWarnings=F, recursive=F)
+  dir.create(dataroot, showWarnings=F, recursive=T)
   dataroot
 }
 
