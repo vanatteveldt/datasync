@@ -40,6 +40,17 @@ save.data <- function(..., file, data_folder=NULL) {
   save(..., file=file)
 }
 
+#' Check whether a file exists in the data folder
+#' 
+#' @param file: the file name to save (relative to data_folder)
+#' @param data_folder: the data folder, defaults to get.data.folder()
+#' @export
+data.file.exists <- function(file, data_folder=NULL) {
+  if (is.null(data_folder)) data_folder = get.data.folder() 
+  file = file.path(data_folder, file)
+  file.exists(file)
+}
+
 #' Conduct an rsync with a remote host
 #' 
 #' Uses a pair of system calls to rsync, so rsync needs to be installed and the current user 
