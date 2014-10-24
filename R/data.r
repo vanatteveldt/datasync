@@ -24,6 +24,7 @@ set.data.folder <- function(data_folder) {
 load.data <- function(file, data_folder=NULL, envir=.GlobalEnv) {
   if (is.null(data_folder)) data_folder = get.data.folder()
   load(file.path(data_folder, file), envir=envir)
+  invisible(envir)
 }
 
 #' Save variables into a file in the data folder
