@@ -44,6 +44,16 @@ Obviously, there is not a lot of magic going on here.
 The use of these functions is to be able to set a data folder as an environment variable, 
 so the project source code does not contain the reference to the local file system
 
+One other convenience feature is that you can pass an environment to `load.data`, 
+and this environment is (invisibly) returned from the call.
+This makes it easy to load files into a 'temporary' environment so variables are not overwritten:
+
+```{r}
+e = load.data("myproject/test.rdata", envir=new.env())
+ls(e)
+e$foo
+```
+
 Synchronizing data
 ----
 
